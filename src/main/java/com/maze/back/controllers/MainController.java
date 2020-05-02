@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,6 +22,7 @@ import lombok.RequiredArgsConstructor;
 public class MainController {
 	
 	private final MemberRepository memberRepository;
+	private final PasswordEncoder passwordEncoder;
 
     @GetMapping("/main")
     public String mainPage(Map<String, Object> model) {
@@ -41,8 +43,10 @@ public class MainController {
 
     @PostMapping("/member/new")
     public String memberJoin(Member memberForm) {
+    	memberForm.setPw(passwordEncoder.encode(memberForm.getPw()));
         memberRepository.save(memberForm);
-        return "redirect:/login";
+        return "redirect:/main";
     }
+    
 	
 }
