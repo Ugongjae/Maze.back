@@ -34,7 +34,7 @@ public class MainMap {
 		else
 			res.put("up", false);
 		
-		if(x<7) {
+		if(x<map.length) {
 			if(map[x+1][y]==0) {
 				res.put("down", true);
 			}
@@ -54,7 +54,7 @@ public class MainMap {
 		else
 			res.put("left", false);
 		
-		if(y<7) {
+		if(y<map[0].length) {
 			if(map[x][y+1]==0) {
 				res.put("right", true);
 			}
