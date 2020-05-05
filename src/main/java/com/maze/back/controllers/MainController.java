@@ -1,52 +1,39 @@
 package com.maze.back.controllers;
 
 import java.util.List;
-import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.maze.back.models.Member;
-import com.maze.back.services.MemberRepository;
-import com.maze.back.services.UserMapper;
+import com.maze.back.security.User;
+import com.maze.back.security.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 
-@Controller
+@RestController
+@RequestMapping("/public")
 @RequiredArgsConstructor
 public class MainController {
 	
-	private final MemberRepository memberRepository;
-	private final PasswordEncoder passwordEncoder;
+	private final UserRepository userRepository;
 
-    @GetMapping("/main")
-    public String mainPage(Map<String, Object> model) {
-        List<Member> members = memberRepository.findAll();
-        model.put("members", members);
-        return "homepage";
+    // Available to all authenticated users
+    @GetMapping("test")
+    public String test1(){
+        return "API Test 1";
     }
 
-    @GetMapping("/admin")
-    public String adminPage(Map<String, Object> model) {
-        return "adminpage";
+    // Available to managers
+    @GetMapping("management/reports")
+    public String reports(){
+        return "API Test 2";
     }
 
-    @GetMapping("/member/new")
-    public String memberJoinForm(Member memberForm) {
-        return "memberJoinForm";
+    // Available to ROLE_ADMIN
+    @GetMapping("admin/users")
+    public List<User> allUsers(){
+        return this.userRepository.findAll();
     }
-
-    @PostMapping("/member/new")
-    public String memberJoin(Member memberForm) {
-    	memberForm.setPw(passwordEncoder.encode(memberForm.getPw()));
-        memberRepository.save(memberForm);
-        return "redirect:/main";
-    }
-    
 	
 }
