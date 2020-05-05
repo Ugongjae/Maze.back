@@ -1,39 +1,34 @@
 package com.maze.back.controllers;
 
-import java.util.List;
-
-import org.springframework.web.bind.annotation.GetMapping;
+import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.maze.back.security.User;
-import com.maze.back.security.UserRepository;
-
-import lombok.RequiredArgsConstructor;
+import com.maze.back.maps.MainMap;
+import com.maze.back.models.LocationModel;
 
 @RestController
-@RequestMapping("/public")
-@RequiredArgsConstructor
+@RequestMapping(value="/game")
 public class MainController {
+	@Autowired
+	private MainMap map;
 	
-	private final UserRepository userRepository;
-
-    // Available to all authenticated users
-    @GetMapping("test")
-    public String test1(){
-        return "API Test 1";
-    }
-
-    // Available to managers
-    @GetMapping("management/reports")
-    public String reports(){
-        return "API Test 2";
-    }
-
-    // Available to ROLE_ADMIN
-    @GetMapping("admin/users")
-    public List<User> allUsers(){
-        return this.userRepository.findAll();
-    }
-	
+	@RequestMapping(value="/move",method=RequestMethod.GET)
+	public String goUp(@RequestHeader String x,@RequestHeader String y) {
+		
+		int ix=Integer.parseInt(x);
+		int iy=Integer.parseInt(y);
+		
+		System.out.print(x);
+		System.out.print(" ");
+		System.out.println(y);
+		
+		JSONObject move=map.checkMove(ix, iy);
+		
+		return move.toString();
+	}
 }
