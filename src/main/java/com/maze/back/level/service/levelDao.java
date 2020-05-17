@@ -2,6 +2,7 @@ package com.maze.back.level.service;
 
 import javax.annotation.Resource;
 
+import org.apache.ibatis.session.SqlSession;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -13,8 +14,7 @@ import com.maze.back.level.model.levelModel;
 public class levelDao {
 	
 	@Autowired
-	@Resource(name="sqlSessionTemplate")
-    private SqlSessionTemplate sqlSession;
+    private SqlSession sqlSession;
 	
 	public levelModel getLevel(int level) throws DataAccessException {
 		return sqlSession.selectOne("CommonSql.selectLevel", level);
